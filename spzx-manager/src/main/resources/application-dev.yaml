@@ -1,0 +1,14 @@
+server:
+  port: 8501
+
+spring:
+  datasource: #mysql database connection
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_spzx?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+  data:
+    redis:  #redis connection
+      host: localhost
+      port: 6379
