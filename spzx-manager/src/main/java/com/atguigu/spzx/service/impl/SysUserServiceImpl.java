@@ -1,14 +1,20 @@
 package com.atguigu.spzx.service.impl;
 
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.ShearCaptcha;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.atguigu.spzx.common.exception.SpzxException;
 import com.atguigu.spzx.mapper.SysUserMapper;
 import com.atguigu.spzx.model.dto.system.LoginDto;
 import com.atguigu.spzx.model.entity.system.SysUser;
+import com.atguigu.spzx.model.vo.common.Result;
 import com.atguigu.spzx.model.vo.common.ResultCodeEnum;
 import com.atguigu.spzx.model.vo.system.LoginVo;
+import com.atguigu.spzx.model.vo.system.ValidateCodeVo;
 import com.atguigu.spzx.service.SysUserService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -27,6 +33,17 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public LoginVo login(LoginDto loginDto) {
+        //CAPTCHA VERIFICATION
+        String codeKeyUserInput = loginDto.getCaptcha();
+        String verfCodeKeyInRedis = loginDto.getCodeKey();
+
+        String codeActualValue = redisTemplate.opsForValue()
+                .get("user:login:captcha:" + verfCodeKeyInRedis);
+        if (!codeKeyUserInput.equalsIgnoreCase(codeActualValue)|| StrUtil.isEmpty(codeKeyUserInput)) {
+            throw new SpzxException(ResultCodeEnum.CAPTCHA_ERROR);
+        }
+        redisTemplate.delete("user:login:captcha:"+verfCodeKeyInRedis);
+        //VERIFICATION COMPLETE, RECORD REMOVED IN REDIS
 
         String userName = loginDto.getUserName();
         String password = loginDto.getPassword();
@@ -66,6 +83,37 @@ public class SysUserServiceImpl implements SysUserService {
         String s = redisTemplate.opsForValue().get(token);
         // parse json back to object then return
         return JSON.parseObject(s, SysUser.class);
+    }
+
+    @Override
+    public Result<T> logout(String token) {
+        Boolean delete = redisTemplate.delete("user:login:");
+        if (delete)
+            return Result.ok();
+        return null;
+    }
+
+    @Override
+    public ValidateCodeVo getCaptcha() {
+        //generate code
+        ShearCaptcha shearCaptcha = CaptchaUtil.createShearCaptcha(150, 48, 4, 6);
+        String codeValue = shearCaptcha.getCode();
+        String imageBase64 = shearCaptcha.getImageBase64().toString();
+
+
+        //generate uuid as key
+        String codeKey = IdUtil.simpleUUID();
+
+        //store the captcha image to redis
+        redisTemplate.opsForValue().set("user:login:captcha:"+
+                codeKey,codeValue,5,TimeUnit.MINUTES);
+
+        //construct response data
+        ValidateCodeVo validateCodeVo = new ValidateCodeVo();
+        validateCodeVo.setCodeKey(codeKey);
+        validateCodeVo.setCodeValue(imageBase64);
+
+        return validateCodeVo;
     }
 
 
