@@ -3,3 +3,6 @@ spring:
     name: service-manager
   profiles:
     active: dev #dev test pro
+
+
+

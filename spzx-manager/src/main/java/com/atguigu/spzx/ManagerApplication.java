@@ -1,7 +1,8 @@
-package com.atguigu.spzx.manager;
+package com.atguigu.spzx;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
 
 @SpringBootApplication
 public class ManagerApplication {
