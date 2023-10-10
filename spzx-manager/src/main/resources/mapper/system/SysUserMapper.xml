@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.spzx.mapper.SysUserMapper">
 
-    <select id="selectByUsername" resultType="com.atguigu.spzx.model.entity.system.SysUser">
-        select * from sys_user where username = #{userName} and is_deleted = 0;
+    <select id="selectByUserName" resultType="com.atguigu.spzx.model.entity.system.SysUser">
+        SELECT * FROM sys_user WHERE username=#{userName} AND is_deleted=0
     </select>
-
 </mapper>

@@ -5,5 +5,5 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface SysUserMapper {
-    SysUser selectByUsername(String userName);
+    SysUser selectByUserName(String userName);
 }

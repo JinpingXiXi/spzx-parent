@@ -1,10 +1,12 @@
 package com.atguigu.spzx;
 
+import com.atguigu.spzx.properties.AuthProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-@ConfigurationPropertiesScan
+//启用属性类（将指定的属性类添加到Spring容器中）
+@EnableConfigurationProperties(AuthProperties.class)
 @SpringBootApplication
 public class ManagerApplication {
     public static void main(String[] args) {
