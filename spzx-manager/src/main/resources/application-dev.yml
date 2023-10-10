@@ -1,0 +1,29 @@
+server:
+  port: 8501 #端口号
+
+spring:
+  datasource: #MySQL数据库连接
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_spzx?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+  data:
+    redis: #Redis数据库连接
+      host: localhost
+      port: 6379
+
+mybatis: #MyBatis配置
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mapper/*/*.xml
+
+#自定义配置
+spzx:
+  auth:
+    noAuthUrls: #不需要拦截的路径
+      - /admin/system/index/login
+      - /admin/system/index/getCaptcha
+      - /doc.html
+      - /v3/api-docs/swagger-config
+      - /v3/api-docs/admin-api
+      - /error

@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: service-manager #服务名
+  profiles:
+    active: dev #dev开发环境、test测试环境、pro生产环境
