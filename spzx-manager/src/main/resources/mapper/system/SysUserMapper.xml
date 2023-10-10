@@ -5,4 +5,28 @@
     <select id="selectByUserName" resultType="com.atguigu.spzx.model.entity.system.SysUser">
         SELECT * FROM sys_user WHERE username=#{userName} AND is_deleted=0
     </select>
+
+    <select id="findByPage" resultType="com.atguigu.spzx.model.entity.system.SysUser">
+        select * from sys_user
+        <where>
+            <if test="keyword != null and keyword!='' ">
+                and (username like CONCAT('%',#{keyword},'%')
+                    or name like CONCAT('%',#{keyword},'%')
+                    or phone like CONCAT('%',#{keyword},'%')
+                )
+            </if>
+            <if test="createTimeBegin != null and createTimeBegin != '' ">
+                and create_time &gt;= #{createTimeBegin}
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != '' " >
+                and create_time &lt;= #{createTimeEnd}
+            </if>
+
+            and is_deleted = 0
+
+        </where>
+
+            order by id desc
+
+    </select>
 </mapper>
