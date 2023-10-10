@@ -20,4 +20,8 @@ public interface SysRoleMapper {
     List<SysRole> selectByPage(SysRoleDto sysRoleDto);
 
     void add(SysRole sysRole);
+
+    Integer deleteById(Long id);
+
+    void updateSysRole(SysRole sysRole);
 }

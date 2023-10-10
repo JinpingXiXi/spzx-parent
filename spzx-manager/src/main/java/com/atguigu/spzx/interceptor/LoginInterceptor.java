@@ -13,8 +13,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.util.concurrent.TimeUnit;
-
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
 
@@ -43,7 +41,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         AuthContextUtil.set(sysUser);
 
         //续期，将token令牌的有限期重置为30分钟
-        redisTemplate.expire("user:login:" + token, 30, TimeUnit.MINUTES);
+//        redisTemplate.expire("user:login:" + token, 30, TimeUnit.MINUTES);
+        redisTemplate.persist("user:login:"+token);
 
         //放行，将请求交给Controller
         return true;

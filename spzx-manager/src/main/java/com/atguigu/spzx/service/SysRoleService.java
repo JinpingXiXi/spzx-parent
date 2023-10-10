@@ -17,4 +17,8 @@ public interface SysRoleService {
     PageInfo<SysRole> findByPage(int pageNum, int pageSize, SysRoleDto sysRoleDto);
 
     void add(SysRole sysRole);
+
+    Integer deleteById(Long id);
+
+    void updateSysRole(SysRole sysRole);
 }

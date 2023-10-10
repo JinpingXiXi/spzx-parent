@@ -17,4 +17,16 @@
                         values(#{roleName},#{roleCode},#{description})
     </insert>
 
+    <update id="deleteById">
+        update sys_role set is_Deleted=1 where id = #{id};
+    </update>
+
+    <update id="updateSysRole">
+        update sys_role set
+                            role_name=#{roleName},
+                            role_code=#{roleCode},
+                            description=#{description}
+        where id = #{id};
+    </update>
+
 </mapper>
