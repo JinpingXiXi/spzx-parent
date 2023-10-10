@@ -29,4 +29,26 @@
             order by id desc
 
     </select>
+
+    <insert id="saveSysUser">
+        INSERT INTO sys_user(id,username,password,name,phone,avatar,description)
+        VALUES (#{id},#{userName},#{password},#{name},#{phone},#{avatar},#{description})
+    </insert>
+
+    <update id="updateSysUser">
+        UPDATE sys_user SET
+                username=#{userName},
+                password=#{password},
+                name=#{name},
+                phone=#{phone},
+                avatar=#{avatar},
+                description=#{description}
+             where   id = #{id}
+
+    </update>
+
+    <update id="deleteSysUserById">
+        update sys_user SET is_deleted = 1 where id = #{id}
+    </update>
+
 </mapper>

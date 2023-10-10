@@ -15,6 +15,13 @@ public class SysUserController {
     @Autowired
     private SysUserServiceImpl sysUserService;
 
+    /**
+     * 用戶分頁查找
+     * @param sysUserDto
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @PostMapping("/findByPage/{pageNum}/{pageSize}")
     public Result findByPage(@RequestBody SysUserDto sysUserDto,
                              @PathVariable Integer pageNum,
@@ -22,4 +29,27 @@ public class SysUserController {
         PageInfo<SysUser> pageInfo = sysUserService.findByPage(sysUserDto,pageNum,pageSize);
         return Result.ok(pageInfo);
     }
+
+
+    @PostMapping("/saveSysUser")
+    public Result saveSysUser(@RequestBody SysUser sysUser){
+        sysUserService.saveSysUser(sysUser);
+        return Result.ok();
+    }
+
+
+    @PutMapping("/updateSysUser")
+    public Result updateSysUser(@RequestBody SysUser sysUser){
+        sysUserService.updateSysUser(sysUser);
+        return Result.ok();
+    }
+
+    @DeleteMapping("/deleteSysUserById/{userId}")
+    public Result deleteSysUser(@PathVariable Integer userId){
+        sysUserService.deleteSysUserById(userId);
+        return Result.ok();
+    }
+
+
+
 }
