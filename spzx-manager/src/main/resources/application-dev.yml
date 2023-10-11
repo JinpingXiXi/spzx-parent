@@ -30,3 +30,8 @@ spzx:
       - /v3/api-docs/admin-api
       - /error
       - /webjars/**
+  minio:
+    endpointUrl: http://127.0.0.1:9000
+    accessKey: minioadmin
+    secreKey: minioadmin
+    bucketName: spzx-bucket

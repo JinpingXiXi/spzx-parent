@@ -16,6 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private AuthProperties authProperties;
 
+
     //添加拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
