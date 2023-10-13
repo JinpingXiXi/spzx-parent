@@ -46,7 +46,7 @@ public class SysMenuController {
         sysMenuService.update(sysMenu);
         return Result.ok();
     }
-
+    @Operation(summary = "邏輯刪除")
     @DeleteMapping("/delete/{id}")
     public Result<T> delete(@PathVariable Long id){
         sysMenuService.delete(id);
@@ -58,6 +58,13 @@ public class SysMenuController {
     public Result<Map<String,Object>> findAssignMenuList(@PathVariable Long roleId){
         Map<String,Object> map = sysMenuService.findAssignMenuList(roleId);
         return Result.ok(map);
+    }
+
+    @Operation(summary = "查詢可訪問的菜單")
+    @GetMapping("/findAccessMenuList")
+    public Result<List<SysMenu>> findAccessMenuList() {
+        List<SysMenu> list = sysMenuService.findAccessMenuList();
+        return Result.ok(list);
     }
 
 }

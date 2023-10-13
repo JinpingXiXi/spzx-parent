@@ -1,5 +1,6 @@
 package com.atguigu.spzx.service.impl;
 
+import com.atguigu.spzx.common.AuthContextUtil;
 import com.atguigu.spzx.common.exception.GuiguException;
 import com.atguigu.spzx.mapper.SysMenuMapper;
 import com.atguigu.spzx.mapper.SysRoleMenuMapper;
@@ -75,6 +76,16 @@ public class SysMenuServiceImpl implements SysMenuService {
             map.put("menuIdList", menuIdList);
             return map;
 
+    }
+
+    @Override
+    public List<SysMenu> findAccessMenuList() {
+        //從線程變量獲取用戶ID
+        Long userId = AuthContextUtil.get().getId();
+
+        List<SysMenu> menuList = sysMenuMapper.selectByUserId(userId);
+
+        return MenuUtil.toTreeList(menuList);
     }
 
 

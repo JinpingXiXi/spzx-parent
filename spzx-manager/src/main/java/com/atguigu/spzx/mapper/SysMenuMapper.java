@@ -25,4 +25,6 @@ public interface SysMenuMapper {
     void delete(Long id);
 
     int findAllSubMenusById();
+
+    List<SysMenu> selectByUserId(Long userId);
 }
