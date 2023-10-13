@@ -4,7 +4,7 @@ import com.atguigu.spzx.model.dto.system.SysRoleDto;
 import com.atguigu.spzx.model.entity.system.SysRole;
 import com.github.pagehelper.PageInfo;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,9 +20,9 @@ public interface SysRoleService {
 
     void add(SysRole sysRole);
 
-    Integer deleteById(Long id);
+    void update(SysRole sysRole);
 
-    void updateSysRole(SysRole sysRole);
+    void delete(long id);
 
-    List<SysRole> findAll();
+    Map<String, Object> findAssignRoleList(long userId);
 }

@@ -4,65 +4,46 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
 import com.atguigu.spzx.properties.MinioProperties;
 import com.atguigu.spzx.service.FileService;
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import io.minio.errors.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.io.InputStream;
 import java.util.Date;
 
 @Service
 public class FileServiceImpl implements FileService {
 
     @Autowired
-    private MinioProperties minioProperties ;
-
+    private MinioProperties minioProperties;
 
     @Override
-    public String upload(MultipartFile file) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
-
+    public String upload(MultipartFile file) throws Exception {
+        // 创建minio客户端对象，连接服务端
         MinioClient minioClient = MinioClient.builder()
-                .endpoint(minioProperties.getEndpointUrl())
-                .credentials(minioProperties.getAccessKey(), minioProperties.getSecreKey())
+                .endpoint(minioProperties.getEndpoint())
+                .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
                 .build();
-        boolean isBucketExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucketName()).build());
-        if (!isBucketExist) {
-            minioClient.makeBucket((MakeBucketArgs.builder().build()));
-        }else{
-            System.out.println("Bucket 'spzx-bucket' already exists.");
-        }
 
-        String dateDir = DateUtil.format(new Date(),"yyyyMMdd");
-        String uuid = IdUtil.simpleUUID();
+        //需要上传的文件
+        InputStream inputStream = file.getInputStream();
 
-        String fileName = dateDir + "/" + uuid + file.getOriginalFilename();
-        System.out.println(fileName);
+        //保存在minio上的名称： 2023-10-12/uuid+原文件名
+        String date = DateUtil.format(new Date(), "yyyy-MM-dd/");
+        String finalName = date + IdUtil.simpleUUID() + file.getOriginalFilename();
 
-        PutObjectArgs putObjectArgsBuild = PutObjectArgs
-                .builder()
-                .bucket(minioProperties.getBucketName())
-                .stream(file.getInputStream(), file.getSize(), -1)
-                .object(fileName)
-                .build();
-        minioClient.putObject(putObjectArgsBuild);
+        // 上传文件
+        minioClient.putObject(PutObjectArgs.builder()
+                .bucket(minioProperties.getBucket()) //桶的名称
+                .object(finalName) //保存在minio上的名称
+                .stream(inputStream, inputStream.available(), -1) //文件流
+                .build());
 
-        //file name looks like /20230801/443e1e772bef482c95be28704bec58a901.png
-        return minioProperties.getEndpointUrl()
-                + "/" + minioProperties.getBucketName()
-                + "/" + fileName;
-
-
+        //返回文件地址
+        return minioProperties.getEndpoint() + "/" +
+                minioProperties.getBucket() + "/" +
+                finalName;
     }
-
-
-
-
-
 }

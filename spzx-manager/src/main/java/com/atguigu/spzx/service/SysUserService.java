@@ -16,11 +16,11 @@ public interface SysUserService {
 
     ValidateCodeVo getCaptcha();
 
-    PageInfo<SysUser> findByPage(SysUserDto sysUserDto, Integer pageNum, Integer pageSize);
+    PageInfo<SysUser> findByPage(int pageNum, int pageSize, SysUserDto sysUserDto);
 
-    void saveSysUser(SysUser sysUser);
+    void add(SysUser sysUser);
 
-    void updateSysUser(SysUser sysUser);
+    void update(SysUser sysUser);
 
-    void deleteSysUserById(Integer id);
+    void delete(long id);
 }

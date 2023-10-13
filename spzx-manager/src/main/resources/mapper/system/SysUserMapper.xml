@@ -1,54 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.spzx.mapper.SysUserMapper">
+    <!--添加用户-->
+    <insert id="insert">
+        INSERT INTO sys_user(username,password,name,phone,avatar,description)
+        VALUES(#{userName},#{password},#{name},#{phone},#{avatar},#{description})
+    </insert>
 
+    <!--修改用户-->
+    <update id="update">
+        UPDATE sys_user SET username=#{userName},name=#{name},phone=#{phone},
+                            avatar=#{avatar},description=#{description}
+        WHERE id=#{id}
+    </update>
+
+    <!--逻辑删除-->
+    <update id="deleteById">
+        UPDATE sys_user SET is_deleted=1 WHERE id=#{id}
+    </update>
+
+    <!--根据用户名查询-->
     <select id="selectByUserName" resultType="com.atguigu.spzx.model.entity.system.SysUser">
         SELECT * FROM sys_user WHERE username=#{userName} AND is_deleted=0
     </select>
 
-    <select id="findByPage" resultType="com.atguigu.spzx.model.entity.system.SysUser">
-        select * from sys_user
+    <!--分页查询-->
+    <select id="selectByPage" resultType="com.atguigu.spzx.model.entity.system.SysUser">
+        SELECT * FROM sys_user
         <where>
-            <if test="keyword != null and keyword!='' ">
-                and (username like CONCAT('%',#{keyword},'%')
-                    or name like CONCAT('%',#{keyword},'%')
-                    or phone like CONCAT('%',#{keyword},'%')
-                )
+            <if test="keyword!=null and keyword!= ''">
+                AND ( username LIKE CONCAT('%',#{keyword},'%') OR
+                 NAME LIKE CONCAT('%',#{keyword},'%') OR
+                 phone LIKE CONCAT('%',#{keyword},'%') )
             </if>
-            <if test="createTimeBegin != null and createTimeBegin != '' ">
-                and create_time &gt;= #{createTimeBegin}
+            <if test="createTimeBegin!=null and createTimeBegin!=''">
+                AND create_time &gt;= #{createTimeBegin}
             </if>
-            <if test="createTimeEnd != null and createTimeEnd != '' " >
-                and create_time &lt;= #{createTimeEnd}
+            <if test="createTimeEnd!=null and createTimeEnd!=''">
+                AND create_time &lt;= #{createTimeEnd}
             </if>
-
-            and is_deleted = 0
-
+            AND is_deleted=0
         </where>
-
-            order by id desc
-
+        ORDER BY id DESC
     </select>
-
-    <insert id="saveSysUser">
-        INSERT INTO sys_user(id,username,password,name,phone,avatar,description)
-        VALUES (#{id},#{userName},#{password},#{name},#{phone},#{avatar},#{description})
-    </insert>
-
-    <update id="updateSysUser">
-        UPDATE sys_user SET
-                username=#{userName},
-                password=#{password},
-                name=#{name},
-                phone=#{phone},
-                avatar=#{avatar},
-                description=#{description}
-             where   id = #{id}
-
-    </update>
-
-    <update id="deleteSysUserById">
-        update sys_user SET is_deleted = 1 where id = #{id}
-    </update>
-
 </mapper>

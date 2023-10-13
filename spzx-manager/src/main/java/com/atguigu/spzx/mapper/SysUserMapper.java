@@ -10,11 +10,11 @@ import java.util.List;
 public interface SysUserMapper {
     SysUser selectByUserName(String userName);
 
-    List<SysUser> findByPage(SysUserDto sysUserDto);
+    List<SysUser> selectByPage(SysUserDto sysUserDto);
 
-    void saveSysUser(SysUser sysUser);
+    void insert(SysUser sysUser);
 
-    void updateSysUser(SysUser sysUser);
+    void update(SysUser sysUser);
 
-    void deleteSysUserById(Integer id);
+    void deleteById(long id);
 }

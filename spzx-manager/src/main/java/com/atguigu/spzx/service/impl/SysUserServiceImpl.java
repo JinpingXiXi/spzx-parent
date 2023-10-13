@@ -1,7 +1,7 @@
 package com.atguigu.spzx.service.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
-import cn.hutool.captcha.GifCaptcha;
+import cn.hutool.captcha.CircleCaptcha;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
@@ -40,7 +40,7 @@ public class SysUserServiceImpl implements SysUserService {
         //使用codeKey到Redis中获取对应的验证码
         String captchaRedis = redisTemplate.opsForValue().get("user:login:captcha:" + codeKey);
         //比较填写的验证码 和 Redis中的验证码
-        if(StrUtil.isEmpty(captcha) || !captcha.equalsIgnoreCase(captchaRedis)){
+        if (StrUtil.isEmpty(captcha) || !captcha.equalsIgnoreCase(captchaRedis)) {
             throw new GuiguException(ResultCodeEnum.CAPTCHA_ERROR);
         }
         //验证码输入正确后删除
@@ -94,11 +94,11 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public ValidateCodeVo getCaptcha() {
         //生成图片验证码  参数：宽、高、验证码位数、干扰线数量
-        GifCaptcha gifCaptcha = CaptchaUtil.createGifCaptcha(150, 50, 4);
+        CircleCaptcha circleCaptcha = CaptchaUtil.createCircleCaptcha(150, 50, 4, 20);
         //获取验证码内容 1cq2
-        String code = gifCaptcha.getCode();
+        String code = circleCaptcha.getCode();
         //获取图片base64
-        String imageBase64 = gifCaptcha.getImageBase64();
+        String imageBase64 = circleCaptcha.getImageBase64();
 
         //验证码对应的key
         String codeKey = IdUtil.simpleUUID();
@@ -113,26 +113,33 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public PageInfo<SysUser> findByPage(SysUserDto sysUserDto, Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
-        List<SysUser> list = sysUserMapper.findByPage(sysUserDto);
-        return new PageInfo(list);
+    public PageInfo<SysUser> findByPage(int pageNum, int pageSize, SysUserDto sysUserDto) {
+        //执行查询前，开启分页
+        PageHelper.startPage(pageNum, pageSize);
+        //执行查询
+        List<SysUser> list = sysUserMapper.selectByPage(sysUserDto);
+        //将查询结果封装到PageInfo分页对象中
+        return new PageInfo<>(list);
     }
 
     @Override
-    public void saveSysUser(SysUser sysUser) {
-        sysUserMapper.saveSysUser(sysUser);
+    public void add(SysUser sysUser) {
+        //将前端页面填写的密码 转为 MD5密文
+        String md5Password = DigestUtils.md5DigestAsHex(sysUser.getPassword().getBytes());
+        //修改为密文后保存
+        sysUser.setPassword(md5Password);
+
+        //保存到数据库
+        sysUserMapper.insert(sysUser);
     }
 
     @Override
-    public void updateSysUser(SysUser sysUser) {
-        sysUserMapper.updateSysUser(sysUser);
+    public void update(SysUser sysUser) {
+        sysUserMapper.update(sysUser);
     }
 
     @Override
-    public void deleteSysUserById(Integer id) {
-        sysUserMapper.deleteSysUserById(id);
+    public void delete(long id) {
+        sysUserMapper.deleteById(id);
     }
-
-
 }

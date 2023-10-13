@@ -19,11 +19,11 @@ public interface SysRoleMapper {
 
     List<SysRole> selectByPage(SysRoleDto sysRoleDto);
 
-    void add(SysRole sysRole);
+    void insert(SysRole sysRole);
 
-    Integer deleteById(Long id);
+    void update(SysRole sysRole);
 
-    void updateSysRole(SysRole sysRole);
+    void deleteById(long id);
 
-    List<SysRole> findAll();
+    List<SysRole> selectAll();
 }

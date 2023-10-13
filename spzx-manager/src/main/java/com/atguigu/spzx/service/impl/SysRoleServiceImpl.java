@@ -1,6 +1,7 @@
 package com.atguigu.spzx.service.impl;
 
 import com.atguigu.spzx.mapper.SysRoleMapper;
+import com.atguigu.spzx.mapper.SysUserRoleMapper;
 import com.atguigu.spzx.model.dto.system.SysRoleDto;
 import com.atguigu.spzx.model.entity.system.SysRole;
 import com.atguigu.spzx.service.SysRoleService;
@@ -9,7 +10,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,6 +27,8 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
     public PageInfo<SysRole> findByPage(int pageNum, int pageSize, SysRoleDto sysRoleDto) {
@@ -37,23 +42,30 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Override
     public void add(SysRole sysRole) {
-        sysRoleMapper.add(sysRole);
+        sysRoleMapper.insert(sysRole);
     }
 
     @Override
-    public Integer deleteById(Long id) {
-        return sysRoleMapper.deleteById(id);
+    public void update(SysRole sysRole) {
+        sysRoleMapper.update(sysRole);
     }
 
     @Override
-    public void updateSysRole(SysRole sysRole) {
-        sysRoleMapper.updateSysRole(sysRole);
+    public void delete(long id) {
+        sysRoleMapper.deleteById(id);
     }
 
     @Override
-    public List<SysRole> findAll() {
-        return sysRoleMapper.findAll();
+    public Map<String, Object> findAssignRoleList(long userId) {
+        //1.查询所有角色 > sys_role表
+        List<SysRole> allRoleList = sysRoleMapper.selectAll();
+        //2.查询指定用户拥有的角色id > sys_user_role表
+        List<Long> assignRoleList = sysUserRoleMapper.selectByUserId(userId);
+
+        //封装到Map中
+        Map<String, Object> map = new HashMap<>();
+        map.put("allRoleList", allRoleList);
+        map.put("assignRoleList", assignRoleList);
+        return map;
     }
-
-
 }

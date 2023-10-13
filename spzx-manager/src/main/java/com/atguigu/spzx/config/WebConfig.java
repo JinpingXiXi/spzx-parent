@@ -1,5 +1,6 @@
 package com.atguigu.spzx.config;
 
+
 import com.atguigu.spzx.interceptor.LoginInterceptor;
 import com.atguigu.spzx.properties.AuthProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,13 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@SuppressWarnings("ALL")
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private LoginInterceptor loginInterceptor;
     @Autowired
     private AuthProperties authProperties;
-
 
     //添加拦截器
     @Override

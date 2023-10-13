@@ -1,14 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.atguigu.spzx.mapper.SysUserMapper">
-
-    <delete id="deleteByUserId">
-        delete from sys_user_role sur where sur.user_id = #{userId}
-    </delete>
-
-    <insert id="doAssign">
-        insert into sys_user_role(user_id , role_id , create_time , update_time , is_deleted)
-        values ( #{userId} , #{roleId} , now() , now() , 0)
+<mapper namespace="com.atguigu.spzx.mapper.SysUserRoleMapper">
+    <!--批量添加角色和用户的关联信息-->
+    <insert id="insertBatch">
+        INSERT INTO sys_user_role(role_id,user_id) VALUES
+        <foreach collection="roleIdList" item="roleId" separator=",">
+            (#{roleId}, #{userId})
+        </foreach>
     </insert>
 
+    <!--根据用户id删除-->
+    <delete id="deleteByUserId">
+        DELETE FROM sys_user_role WHERE user_id=#{userId}
+    </delete>
+
+    <!--查询指定用户拥有的角色id-->
+    <select id="selectByUserId" resultType="java.lang.Long">
+        SELECT role_id FROM sys_user_role WHERE user_id=#{userId} AND is_deleted=0
+    </select>
 </mapper>
