@@ -58,6 +58,7 @@ public class FileServiceImpl implements FileService {
                 + "/" + minioProperties.getBucketName()
                 + "/" + fileName;
 
+
     }
 
 

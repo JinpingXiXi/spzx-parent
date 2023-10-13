@@ -50,5 +50,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         sysRoleMapper.updateSysRole(sysRole);
     }
 
+    @Override
+    public List<SysRole> findAll() {
+        return sysRoleMapper.findAll();
+    }
+
 
 }

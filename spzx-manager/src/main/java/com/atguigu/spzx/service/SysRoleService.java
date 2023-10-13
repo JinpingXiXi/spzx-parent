@@ -4,6 +4,8 @@ import com.atguigu.spzx.model.dto.system.SysRoleDto;
 import com.atguigu.spzx.model.entity.system.SysRole;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * <p>
  * 角色 服务类
@@ -21,4 +23,6 @@ public interface SysRoleService {
     Integer deleteById(Long id);
 
     void updateSysRole(SysRole sysRole);
+
+    List<SysRole> findAll();
 }

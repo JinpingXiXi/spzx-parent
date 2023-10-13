@@ -59,5 +59,11 @@ public class SysRoleController {
         sysRoleService.updateSysRole(sysRole);
         return Result.ok();
     }
+
+    @GetMapping("/findAll")
+    public Result<List<SysRole>> findAll() {
+        List<SysRole> list = sysRoleService.findAll();
+        return Result.ok(list);
+    }
 }
 

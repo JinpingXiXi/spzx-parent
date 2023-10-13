@@ -24,4 +24,6 @@ public interface SysRoleMapper {
     Integer deleteById(Long id);
 
     void updateSysRole(SysRole sysRole);
+
+    List<SysRole> findAll();
 }
