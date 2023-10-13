@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.spzx.mapper.SysMenuMapper">
-
-    <!--添加菜单-->
     <insert id="insert">
-        INSERT INTO sys_menu(parent_id, title, name, sort_value, status)
-        VALUES (#{parentId}, #{title}, #{name}, #{sortValue}, #{status})
+        INSERT INTO sys_menu (parent_id,title,name,sort_value,status)
+            VALUES (#{parentId},#{title},#{name},#{sortValue},#{status})
     </insert>
 
-    <!--修改菜单-->
     <update id="update">
-        UPDATE sys_menu SET title=#{title},name=#{name},sort_value=#{sortValue},status=#{status}
-        WHERE id=#{id}
+        UPDATE sys_menu SET
+                            parent_id=#{parentId},
+                            title=#{title},
+                            name=#{name},
+                            sort_value=#{sortValue},
+                            status=#{status}
+            WHERE id = #{id};
     </update>
 
-    <!--查询所有菜单-->
     <select id="selectAll" resultType="com.atguigu.spzx.model.entity.system.SysMenu">
-        SELECT * FROM sys_menu WHERE is_deleted=0
+        select * from sys_menu where is_deleted = 0
     </select>
+
+    <update id="delete">
+        UPDATE sys_menu SET is_deleted = 1 where id = #{id};
+    </update>
+
+
+    <select id="findAllSubMenusById" resultType="java.lang.Integer">
+        select count(*) from sys_menu
+            where parent_id = #{id} and is_deleted=0
+    </select>
+
 </mapper>

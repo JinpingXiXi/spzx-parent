@@ -12,7 +12,6 @@
         <module>spzx-common</module>
         <module>spzx-model</module>
         <module>spzx-manager</module>
-        <module>code-generator</module>
     </modules>
 
     <!-- 指定父工程 -->

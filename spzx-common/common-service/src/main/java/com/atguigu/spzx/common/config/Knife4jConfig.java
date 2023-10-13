@@ -26,10 +26,10 @@ public class Knife4jConfig {
 
         return new OpenAPI()
                  .info(new Info()
-                 .title("尚品甑选API接口文档")
+                 .title("尚品甄選")
                  .version("1.0")
-                 .description("尚品甑选API接口文档")
-                 .contact(new Contact().name("atguigu"))); // 设定作者
+                 .description("尚品甄選API接口文檔")
+                 .contact(new Contact().name("OuYang"))); // 设定作者
     }
 
 }

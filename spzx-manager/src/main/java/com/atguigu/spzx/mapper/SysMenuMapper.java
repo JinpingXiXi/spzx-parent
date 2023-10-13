@@ -21,4 +21,8 @@ public interface SysMenuMapper {
     void insert(SysMenu sysMenu);
 
     void update(SysMenu sysMenu);
+
+    void delete(Long id);
+
+    int findAllSubMenusById();
 }

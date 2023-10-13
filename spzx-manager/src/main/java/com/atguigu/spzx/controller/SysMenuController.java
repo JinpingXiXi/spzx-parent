@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,25 +29,36 @@ public class SysMenuController {
     @Autowired
     private SysMenuService sysMenuService;
 
-    @Operation(summary = "查询树节点菜单")
     @GetMapping("/findTreeList")
     public Result<List<SysMenu>> findTreeList(){
-        List<SysMenu> list = sysMenuService.findTreeList();
-        return Result.ok(list);
+        List<SysMenu> resultList = sysMenuService.findTreeList();
+        return Result.ok(resultList);
     }
 
-    @Operation(summary = "添加")
     @PostMapping("/add")
     public Result<T> add(@RequestBody SysMenu sysMenu){
         sysMenuService.add(sysMenu);
         return Result.ok();
     }
 
-    @Operation(summary = "修改")
     @PutMapping("/update")
     public Result<T> update(@RequestBody SysMenu sysMenu){
         sysMenuService.update(sysMenu);
         return Result.ok();
     }
+
+    @DeleteMapping("/delete/{id}")
+    public Result<T> delete(@PathVariable Long id){
+        sysMenuService.delete(id);
+        return Result.ok();
+    }
+
+    @Operation(summary = "查詢分配的菜單列表")
+    @GetMapping("/findAssignMenuList/{roleId}")
+    public Result<Map<String,Object>> findAssignMenuList(@PathVariable Long roleId){
+        Map<String,Object> map = sysMenuService.findAssignMenuList(roleId);
+        return Result.ok(map);
+    }
+
 }
 
