@@ -13,6 +13,9 @@
             parent_id = #{parentId}
           and is_deleted = 0
     </select>
+    <select id="selectAll" resultType="com.atguigu.spzx.model.entity.product.Category">
+        select * from category where is_deleted = 0
+    </select>
 
 
 </mapper>

@@ -12,6 +12,12 @@
     <artifactId>spzx-model</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
         <!-- lombok的依赖 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
